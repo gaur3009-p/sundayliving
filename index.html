@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sunday Living - Art Studio | Kanpur</title>
+<meta name="description" content="Sunday Living Art Studio by @nims.okplease - Creative art space in Kanpur. Book your session today!">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          serif: ['Playfair Display', 'serif'],
+          sans: ['Inter', 'sans-serif'],
+        },
+        colors: {
+          cream: '#FAF7F2',
+          sand: '#F5EDE4',
+          clay: '#C4956A',
+          terracotta: '#B87D4B',
+          charcoal: '#2C2420',
+          warmgray: '#8A7E72',
+          sage: '#8B9A7D',
+          blush: '#E8D5C4',
+        }
+      }
+    }
+  }
+</script>
+<style>
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+  .lenis.lenis-stopped { overflow: hidden; }
+
+  ::selection { background: #C4956A; color: white; }
+
+  .grain-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 9999; opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+
+  .hero-text-reveal {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+  }
+
+  .magnetic-btn {
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .service-card {
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .service-card:hover {
+    transform: translateY(-8px);
+  }
+  .service-card:hover .service-icon {
+    transform: scale(1.1) rotate(-5deg);
+  }
+
+  .gallery-item {
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .gallery-item:hover {
+    transform: scale(1.02);
+  }
+  .gallery-item:hover img {
+    transform: scale(1.1);
+  }
+
+  .testimonial-card {
+    transition: all 0.4s ease;
+  }
+  .testimonial-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(44, 36, 32, 0.08);
+  }
+
+  .nav-link {
+    position: relative;
+  }
+  .nav-link::after {
+    content: ''; position: absolute; bottom: -2px; left: 0;
+    width: 0; height: 1.5px; background: #C4956A;
+    transition: width 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .nav-link:hover::after { width: 100%; }
+
+  .float-whatsapp {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3); }
+    50% { box-shadow: 0 4px 30px rgba(37, 211, 102, 0.5); }
+  }
+
+  .scroll-indicator {
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+  }
+
+  .divider-line {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #C4956A, transparent);
+  }
+
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: #C4956A;
+    box-shadow: 0 0 0 3px rgba(196, 149, 106, 0.1);
+  }
+
+  .parallax-bg {
+    will-change: transform;
+  }
+
+  .cursor-dot {
+    width: 8px; height: 8px; background: #C4956A;
+    border-radius: 50%; position: fixed; pointer-events: none;
+    z-index: 10000; transition: transform 0.1s ease;
+    mix-blend-mode: difference;
+  }
+  .cursor-outline {
+    width: 40px; height: 40px; border: 1.5px solid #C4956A;
+    border-radius: 50%; position: fixed; pointer-events: none;
+    z-index: 9999; transition: all 0.15s ease;
+  }
+
+  @media (pointer: coarse) {
+    .cursor-dot, .cursor-outline { display: none; }
+  }
+
+  .fade-up {
+    opacity: 0; transform: translateY(40px);
+  }
+  .fade-in {
+    opacity: 0;
+  }
+
+  .instagram-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+  }
+</style>
+<base target="_blank">
+</head>
+<body class="bg-cream text-charcoal font-sans antialiased overflow-x-hidden">
+
+<!-- Grain Overlay -->
+<div class="grain-overlay"></div>
+
+<!-- Custom Cursor -->
+<div class="cursor-dot hidden md:block" id="cursorDot"></div>
+<div class="cursor-outline hidden md:block" id="cursorOutline"></div>
+
+<!-- Navigation -->
+<nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20 lg:h-24">
+      <!-- Logo -->
+      <a href="#" class="flex items-center gap-3 group">
+        <img src="https://github.com/gaur3009-p/drunk/raw/main/623286070_18556953166047918_4680378225490288554_n.jpg" 
+             alt="Sunday Living Logo" 
+             class="h-12 w-12 lg:h-14 lg:w-14 rounded-full object-cover border-2 border-white/20 group-hover:border-clay transition-all duration-300 shadow-lg">
+        <div class="hidden sm:block">
+          <h1 class="font-serif text-xl lg:text-2xl font-semibold text-white tracking-wide">Sunday Living</h1>
+          <p class="text-xs text-white/60 tracking-widest uppercase">Art Studio</p>
+        </div>
+      </a>
+
+      <!-- Desktop Nav -->
+      <div class="hidden lg:flex items-center gap-10">
+        <a href="#about" class="nav-link text-sm text-white/80 hover:text-white transition-colors tracking-wide">About</a>
+        <a href="#services" class="nav-link text-sm text-white/80 hover:text-white transition-colors tracking-wide">Services</a>
+        <a href="#gallery" class="nav-link text-sm text-white/80 hover:text-white transition-colors tracking-wide">Gallery</a>
+        <a href="#testimonials" class="nav-link text-sm text-white/80 hover:text-white transition-colors tracking-wide">Reviews</a>
+        <a href="#contact" class="nav-link text-sm text-white/80 hover:text-white transition-colors tracking-wide">Contact</a>
+      </div>
+
+      <!-- CTA + Mobile Menu -->
+      <div class="flex items-center gap-4">
+        <a href="https://wa.me/917266083355?text=Hi%20Sunday%20Living!%20I%20would%20like%20to%20book%20a%20session%20at%20your%20Art%20Studio.%20Please%20share%20details." 
+           target="_blank"
+           class="hidden md:flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-white hover:text-charcoal transition-all duration-300 magnetic-btn">
+          <i data-lucide="message-circle" class="w-4 h-4"></i>
+          Book Now
+        </a>
+        <button id="mobileMenuBtn" class="lg:hidden text-white p-2">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="lg:hidden fixed inset-0 bg-charcoal/95 backdrop-blur-xl z-40 hidden opacity-0 transition-opacity duration-300">
+    <div class="flex flex-col items-center justify-center h-full gap-8">
+      <a href="#about" class="text-2xl font-serif text-white/80 hover:text-clay transition-colors mobile-link">About</a>
+      <a href="#services" class="text-2xl font-serif text-white/80 hover:text-clay transition-colors mobile-link">Services</a>
+      <a href="#gallery" class="text-2xl font-serif text-white/80 hover:text-clay transition-colors mobile-link">Gallery</a>
+      <a href="#testimonials" class="text-2xl font-serif text-white/80 hover:text-clay transition-colors mobile-link">Reviews</a>
+      <a href="#contact" class="text-2xl font-serif text-white/80 hover:text-clay transition-colors mobile-link">Contact</a>
+      <a href="https://wa.me/917266083355?text=Hi%20Sunday%20Living!%20I%20would%20like%20to%20book%20a%20session%20at%20your%20Art%20Studio.%20Please%20share%20details." 
+         target="_blank"
+         class="mt-4 flex items-center gap-2 bg-clay text-white px-8 py-3 rounded-full text-lg">
+        <i data-lucide="message-circle" class="w-5 h-5"></i>
+        Book on WhatsApp
+      </a>
+    </div>
+    <button id="closeMobileMenu" class="absolute top-6 right-6 text-white p-2">
+      <i data-lucide="x" class="w-8 h-8"></i>
+    </button>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+  <!-- Background Image with Parallax -->
+  <div class="absolute inset-0 z-0">
+    <div class="parallax-bg absolute inset-0 scale-110">
+      <img src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=1920&q=80" 
+           alt="Art Studio Background" 
+           class="w-full h-full object-cover">
+    </div>
+    <div class="absolute inset-0 bg-gradient-to-b from-charcoal/70 via-charcoal/50 to-charcoal/80"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="relative z-10 text-center px-6 max-w-5xl mx-auto pt-20">
+    <div class="mb-8 fade-in" id="heroLogo">
+      <img src="https://github.com/gaur3009-p/drunk/raw/main/623286070_18556953166047918_4680378225490288554_n.jpg" 
+           alt="Sunday Living" 
+           class="w-28 h-28 lg:w-36 lg:h-36 mx-auto rounded-full object-cover border-4 border-white/20 shadow-2xl">
+    </div>
+
+    <p class="text-clay text-sm lg:text-base tracking-[0.3em] uppercase mb-4 fade-up" id="heroSubtitle">Art Studio</p>
+
+    <h1 class="font-serif text-5xl sm:text-6xl lg:text-8xl xl:text-9xl text-white font-medium leading-[0.9] mb-6 fade-up" id="heroTitle">
+      <span class="block">Sunday</span>
+      <span class="block italic text-clay">Living</span>
+    </h1>
+
+    <p class="text-white/60 text-base lg:text-lg max-w-xl mx-auto mb-4 fade-up leading-relaxed" id="heroTagline">
+      Where creativity meets calm. A curated space for art, expression, and mindful living in the heart of Kanpur.
+    </p>
+
+    <p class="text-white/40 text-sm mb-10 fade-up" id="heroByline">by <span class="text-clay">@nims.okplease</span></p>
+
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 fade-up" id="heroCTA">
+      <a href="https://wa.me/917266083355?text=Hi%20Sunday%20Living!%20I%20would%20like%20to%20book%20a%20session%20at%20your%20Art%20Studio.%20Please%20share%20details." 
+         target="_blank"
+         class="magnetic-btn group flex items-center gap-3 bg-clay hover:bg-terracotta text-white px-8 py-4 rounded-full text-sm font-semibold tracking-wide transition-all duration-300 shadow-xl shadow-clay/20 hover:shadow-2xl hover:shadow-clay/30">
+        <i data-lucide="calendar" class="w-4 h-4"></i>
+        Book a Session
+        <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+      </a>
+      <a href="#about" 
+         class="magnetic-btn flex items-center gap-2 text-white/70 hover:text-white border border-white/20 hover:border-white/40 px-8 py-4 rounded-full text-sm transition-all duration-300">
+        Explore Studio
+      </a>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 scroll-indicator">
+      <a href="#about" class="flex flex-col items-center gap-2 text-white/40 hover:text-white/60 transition-colors">
+        <span class="text-xs tracking-widest uppercase">Scroll</span>
+        <i data-lucide="chevron-down" class="w-5 h-5"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="py-24 lg:py-32 bg-cream relative overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+      <!-- Image Side -->
+      <div class="relative fade-up">
+        <div class="relative">
+          <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&q=80" 
+               alt="Art Studio Interior" 
+               class="w-full h-[500px] lg:h-[600px] object-cover rounded-2xl shadow-2xl">
+          <div class="absolute -bottom-6 -right-6 bg-white p-6 rounded-xl shadow-xl">
+            <p class="font-serif text-4xl text-clay font-semibold">5+</p>
+            <p class="text-sm text-warmgray">Years of<br>Creative Excellence</p>
+          </div>
+        </div>
+        <div class="absolute -top-4 -left-4 w-24 h-24 border-2 border-clay/20 rounded-full"></div>
+      </div>
+
+      <!-- Content Side -->
+      <div class="fade-up">
+        <p class="text-clay text-sm tracking-[0.2em] uppercase mb-4">About the Studio</p>
+        <h2 class="font-serif text-4xl lg:text-5xl text-charcoal mb-6 leading-tight">
+          A Space for <span class="italic text-clay">Creative</span> Souls
+        </h2>
+        <div class="w-16 h-0.5 bg-clay mb-8"></div>
+        <p class="text-warmgray text-base lg:text-lg leading-relaxed mb-6">
+          Sunday Living is more than an art studio, it is a sanctuary for those who seek to express themselves through color, texture, and form. Founded by <span class="text-charcoal font-medium">@nims.okplease</span>, we believe art is not just about creating, it is about living.
+        </p>
+        <p class="text-warmgray text-base lg:text-lg leading-relaxed mb-8">
+          Nestled above Personality Ikon salon in Model Town, our studio offers a warm, inviting atmosphere where beginners and seasoned artists alike can explore painting, sketching, mixed media, and therapeutic art sessions.
+        </p>
+
+        <div class="grid grid-cols-2 gap-6 mb-8">
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-full bg-clay/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="palette" class="w-5 h-5 text-clay"></i>
+            </div>
+            <div>
+              <h4 class="font-semibold text-charcoal text-sm">All Mediums</h4>
+              <p class="text-warmgray text-xs mt-1">Acrylic, oil, watercolor & more</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-full bg-clay/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="users" class="w-5 h-5 text-clay"></i>
+            </div>
+            <div>
+              <h4 class="font-semibold text-charcoal text-sm">All Levels</h4>
+              <p class="text-warmgray text-xs mt-1">Beginner to advanced</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-full bg-clay/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="heart" class="w-5 h-5 text-clay"></i>
+            </div>
+            <div>
+              <h4 class="font-semibold text-charcoal text-sm">Therapeutic</h4>
+              <p class="text-warmgray text-xs mt-1">Mindful art experiences</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-full bg-clay/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="sparkles" class="w-5 h-5 text-clay"></i>
+            </div>
+            <div>
+              <h4 class="font-semibold text-charcoal text-sm">Curated</h4>
+              <p class="text-warmgray text-xs mt-1">Personalized guidance</p>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://wa.me/917266083355?text=Hi%20Sunday%20Living!%20I%20would%20like%20to%20know%20more%20about%20your%20art%20sessions.%20Please%20share%20details." 
+           target="_blank"
+           class="inline-flex items-center gap-2 text-clay font-medium hover:text-terracotta transition-colors group">
+          Start Your Journey
+          <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Services Section -->
+<section id="services" class="py-24 lg:py-32 bg-sand relative">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="text-center mb-16 fade-up">
+      <p class="text-clay text-sm tracking-[0.2em] uppercase mb-4">What We Offer</p>
+      <h2 class="font-serif text-4xl lg:text-5xl text-charcoal mb-4">Our Services</h2>
+      <div class="divider-line max-w-xs mx-auto"></div>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Service 1 -->
+      <div class="service-card bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl fade-up">
+        <div class="service-icon w-14 h-14 rounded-xl bg-clay/10 flex items-center justify-center mb-6 transition-transform duration-300">
+          <i data-lucide="brush" class="w-7 h-7 text-clay"></i>
+        </div>
+        <h3 class="font-serif text-xl text-charcoal mb-3">Painting Sessions</h3>
+        <p class="text-warmgray text-sm leading-relaxed mb-4">Guided painting sessions in acrylic, oil, and watercolor. All materials provided. Perfect for beginners and experienced artists.</p>
+        <a href="https://wa.me/917266083355?text=Hi%20Sunday%20Living!%20I%20am%20interested%20in%20your%20Painting%20Sessions.%20Please%20share%20pricing%20and%20availability." 
+           target="_blank" class="text-clay text-sm font-medium hover:text-terracotta transition-colors flex items-center gap-1">
+          Enquire <i data-lucide="arrow-right" class="w-3 h-3"></i>
+        </a>
+      </div>
+
+      <!-- Service 2 -->
+      <div class="service-card bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl fade-up">
+        <div class="service-icon w-14 h-14 rounded-xl bg-clay/10 flex items-center justify-center mb-6 transition-transform duration-300">
+          <i data-lucide="pencil" class="w-7 h-7 text-clay"></i>
+        </div>
+        <h3 class="font-serif text-xl text-charcoal mb-3">Sketching & Drawing</h3>
+        <p class="text-warmgray text-sm leading-relaxed mb-4">Learn fundamental sketching techniques, shading, perspective, and portrait drawing with personalized one-on-one guidance.</p>
+        <a href="https://wa.me/917266083355?text=Hi%20Sunday%20Living!%20I%20am%20interested%20in%20your%20Sketching%20%26%20Drawing%20classes.%20Please%20share%20details." 
+           target="_blank" class="text-clay text-sm font-medium hover:text-terracotta transition-colors flex items-center gap-1">
+          Enquire <i data-lucide="arrow-right" class="w-3 h-3"></i>
+        </a>
+      </div>
+
+      <!-- Service 3 -->
+      <div class="service-card bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl fade-up">
+        <div class="service-icon w-14 h-14 rounded-xl bg-clay/10 flex items-center justify-center mb-6 transition-transform duration-300">
+          <i data-lucide="flower-2" class="w-7 h-7 text-clay"></i>
+        </div>
+        <h3 class="font-serif text-xl text-charcoal mb-3">Art Therapy</h3>
+        <p class="text-warmgray text-sm leading-relaxed mb-4">Therapeutic art sessions designed for stress relief, mindfulness, and emotional well-being through creative expression.</p>
+        <a href="https://wa.me/917266083355?text=Hi%20Sunday%20Living!%20I%20am%20interested%20in%20your%20Art%20Therapy%20sessions.%20Please%20share%20details." 
+           target="_blank" class="text-clay text-sm font-medium hover:text-terracotta transition-colors flex items-center gap-1">
+          Enquire <i data-lucide="arrow-right" class="w-3 h-3"></i>
+        </a>
+      </div>
+
+      <!-- Service 4 -->
+      <div class="service-card bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl fade-up">
+        <div class="service-icon w-14 h-14 rounded-xl bg-clay/10 flex items-center justify-center mb-6 transition-transform duration-300">
+          <i data-lucide="users-round" class="w-7 h-7 text-clay"></i>
+        </div>
+        <h3 class="font-serif text-xl text-charcoal mb-3">Group Workshops</h3>
+        <p class="text-warmgray text-sm leading-relaxed mb-4">Collaborative art workshops for friends, families, and corporate teams. Build connections through shared creativity.</p>
+        <a href="https://wa.me/917266083355?text=Hi%20Sunday%20Living!%20I%20am%20interested%20in%20your%20Group%20Workshops.%20Please%20share%20pricing%20and%20availability." 
+           target="_blank" class="text-clay text-sm font-medium hover:text-terracotta transition-colors flex items-center gap-1">
+          Enquire <i data-lucide="arrow-right" class="w-3 h-3"></i>
+        </a>
+      </div>
+
+      <!-- Service 5 -->
+      <div class="service-card bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl fade-up">
+        <div class="service-icon w-14 h-14 rounded-xl bg-clay/10 flex items-center justify-center mb-6 transition-transform duration-300">
+          <i data-lucide="cake" class="w-7 h-7 text-clay"></i>
+        </div>
+        <h3 class="font-serif text-xl text-charcoal mb-3">Art Parties</h3>
+        <p class="text-warmgray text-sm leading-relaxed mb-4">Celebrate birthdays, anniversaries, and special occasions with a unique art party experience. Custom themes available.</p>
+        <a href="https://wa.me/917266083355?text=Hi%20Sunday%20Living!%20I%20am%20interested%20in%20booking%20an%20Art%20Party.%20Please%20share%20details%20and%20pricing." 
+           target="_blank" class="text-clay text-sm font-medium hover:text-terracotta transition-colors flex items-center gap-1">
+          Enquire <i data-lucide="arrow-right" class="w-3 h-3"></i>
+        </a>
+      </div>
+
+      <!-- Service 6 -->
+      <div class="service-card bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl fade-up">
+        <div class="service-icon w-14 h-14 rounded-xl bg-clay/10 flex items-center justify-center mb-6 transition-transform duration-300">
+          <i data-lucide="gift" class="w-7 h-7 text-clay"></i>
+        </div>
+        <h3 class="font-serif text-xl text-charcoal mb-3">Custom Commissions</h3>
+        <p class="text-warmgray text-sm leading-relaxed mb-4">Bespoke artwork commissions for homes, offices, and gifts. From portraits to abstract pieces, tailored to your vision.</p>
+        <a href="https://wa.me/917266083355?text=Hi%20Sunday%20Living!%20I%20am%20interested%20in%20a%20Custom%20Art%20Commission.%20Please%20share%20details." 
+           target="_blank" class="text-clay text-sm font-medium hover:text-terracotta transition-colors flex items-center gap-1">
+          Enquire <i data-lucide="arrow-right" class="w-3 h-3"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Gallery Section -->
+<section id="gallery" class="py-24 lg:py-32 bg-cream">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="text-center mb-16 fade-up">
+      <p class="text-clay text-sm tracking-[0.2em] uppercase mb-4">Portfolio</p>
+      <h2 class="font-serif text-4xl lg:text-5xl text-charcoal mb-4">Studio Gallery</h2>
+      <div class="divider-line max-w-xs mx-auto"></div>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div class="gallery-item rounded-xl overflow-hidden aspect-square fade-up">
+        <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=600&q=80" 
+             alt="Abstract Art" class="w-full h-full object-cover transition-transform duration-700">
+      </div>
+      <div class="gallery-item rounded-xl overflow-hidden aspect-[3/4] fade-up row-span-2">
+        <img src="https://images.unsplash.com/photo-1547891654-e66ed7ebb968?w=600&q=80" 
+             alt="Oil Painting" class="w-full h-full object-cover transition-transform duration-700">
+      </div>
+      <div class="gallery-item rounded-xl overflow-hidden aspect-square fade-up">
+        <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=600&q=80" 
+             alt="Studio Work" class="w-full h-full object-cover transition-transform duration-700">
+      </div>
+      <div class="gallery-item rounded-xl overflow-hidden aspect-square fade-up">
+        <img src="https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=600&q=80" 
+             alt="Watercolor" class="w-full h-full object-cover transition-transform duration-700">
+      </div>
+      <div class="gallery-item rounded-xl overflow-hidden aspect-[3/4] fade-up row-span-2">
+        <img src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=600&q=80" 
+             alt="Art Supplies" class="w-full h-full object-cover transition-transform duration-700">
+      </div>
+      <div class="gallery-item rounded-xl overflow-hidden aspect-square fade-up">
+        <img src="https://images.unsplash.com/photo-1545989253-02cc26577f88?w=600&q=80" 
+             alt="Canvas Painting" class="w-full h-full object-cover transition-transform duration-700">
+      </div>
+      <div class="gallery-item rounded-xl overflow-hidden aspect-square fade-up">
+        <img src="https://images.unsplash.com/photo-1571115764595-644a1f56a55c?w=600&q=80" 
+             alt="Creative Process" class="w-full h-full object-cover transition-transform duration-700">
+      </div>
+      <div class="gallery-item rounded-xl overflow-hidden aspect-square fade-up">
+        <img src="https://images.unsplash.com/photo-1580136608260-4eb11f4b64fe?w=600&q=80" 
+             alt="Art Display" class="w-full h-full object-cover transition-transform duration-700">
+      </div>
+    </div>
+
+    <div class="text-center mt-12">
+      <a href="https://www.instagram.com/sundayliving.in" target="_blank"
+         class="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 text-white px-8 py-3 rounded-full text-sm font-medium hover:shadow-lg hover:shadow-pink-500/20 transition-all duration-300">
+        <i data-lucide="instagram" class="w-5 h-5"></i>
+        View More on Instagram
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-20 bg-charcoal relative overflow-hidden">
+  <div class="absolute inset-0 opacity-10">
+    <img src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=1920&q=80" 
+         class="w-full h-full object-cover" alt="">
+  </div>
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+      <div class="fade-up">
+        <p class="font-serif text-4xl lg:text-5xl text-clay font-semibold mb-2">500+</p>
+        <p class="text-white/60 text-sm">Happy Artists</p>
+      </div>
+      <div class="fade-up">
+        <p class="font-serif text-4xl lg:text-5xl text-clay font-semibold mb-2">1000+</p>
+        <p class="text-white/60 text-sm">Artworks Created</p>
+      </div>
+      <div class="fade-up">
+        <p class="font-serif text-4xl lg:text-5xl text-clay font-semibold mb-2">50+</p>
+        <p class="text-white/60 text-sm">Workshops Hosted</p>
+      </div>
+      <div class="fade-up">
+        <p class="font-serif text-4xl lg:text-5xl text-clay font-semibold mb-2">5+</p>
+        <p class="text-white/60 text-sm">Years Running</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials Section -->
+<section id="testimonials" class="py-24 lg:py-32 bg-sand">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="text-center mb-16 fade-up">
+      <p class="text-clay text-sm tracking-[0.2em] uppercase mb-4">Testimonials</p>
+      <h2 class="font-serif text-4xl lg:text-5xl text-charcoal mb-4">What Artists Say</h2>
+      <div class="divider-line max-w-xs mx-auto"></div>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="testimonial-card bg-white rounded-2xl p-8 fade-up">
+        <div class="flex items-center gap-1 mb-4">
+          <i data-lucide="star" class="w-4 h-4 text-clay fill-clay"></i>
+          <i data-lucide="star" class="w-4 h-4 text-clay fill-clay"></i>
+          <i data-lucide="star" class="w-4 h-4 text-clay fill-clay"></i>
+          <i data-lucide="star" class="w-4 h-4 text-clay fill-clay"></i>
+          <i data-lucide="star" class="w-4 h-4 text-clay fill-clay"></i>
+        </div>
+        <p class="text-warmgray text-sm leading-relaxed mb-6">"Sunday Living is my happy place. The atmosphere is so calming and Nimisha's guidance helped me discover my love for watercolor painting. Highly recommend!"</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-clay/20 flex items-center justify-center">
+            <span class="text-clay font-serif font-semibold">A</span>
+          </div>
+          <div>
+            <p class="font-medium text-charcoal text-sm">Ananya Sharma</p>
+            <p class="text-warmgray text-xs">Regular Artist</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card bg-white rounded-2xl p-8 fade-up">
+        <div class="flex items-center gap-1 mb-4">
+          <i data-lucide="star" class="w-4 h-4 text-clay fill-clay"></i>
+          <i data-lucide="star" class="w-4 h-4 text-clay fill-clay"></i>
+          <i data-lucide="star" class="w-4 h-4 text-clay fill-clay"></i>
+          <i data-lucide="star" class="w-4 h-4 text-clay fill-clay"></i>
+          <i data-lucide="star" class="w-4 h-4 text-clay fill-clay"></i>
+        </div>
+        <p class="text-warmgray text-sm leading-relaxed mb-6">"I booked an art party for my daughter's birthday and it was magical! The kids had so much fun and everyone took home a beautiful painting. Thank you Sunday Living!"</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-clay/20 flex items-center justify-center">
+            <span class="text-clay font-serif font-semibold">P</span>
+          </div>
+          <div>
+            <p class="font-medium text-charcoal text-sm">Priya Gupta</p>
+            <p class="text-warmgray text-xs">Art Party Client</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card bg-white rounded-2xl p-8 fade-up">
+        <div class="flex items-center gap-1 mb-4">
+          <i data-lucide="star" class="w-4 h-4 text-clay fill-clay"></i>
+          <i data-lucide="star" class="w-4 h-4 text-clay fill-clay"></i>
+          <i data-lucide="star" class="w-4 h-4 text-clay fill-clay"></i>
+          <i data-lucide="star" class="w-4 h-4 text-clay fill-clay"></i>
+          <i data-lucide="star" class="w-4 h-4 text-clay fill-clay"></i>
+        </div>
+        <p class="text-warmgray text-sm leading-relaxed mb-6">"The art therapy sessions here have been transformative for my mental health. It's amazing how creativity can heal. Nimisha creates such a safe, nurturing space."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-clay/20 flex items-center justify-center">
+            <span class="text-clay font-serif font-semibold">R</span>
+          </div>
+          <div>
+            <p class="font-medium text-charcoal text-sm">Rahul Verma</p>
+            <p class="text-warmgray text-xs">Art Therapy Client</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-24 lg:py-32 bg-cream">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid lg:grid-cols-2 gap-16 items-start">
+      <!-- Contact Info -->
+      <div class="fade-up">
+        <p class="text-clay text-sm tracking-[0.2em] uppercase mb-4">Get in Touch</p>
+        <h2 class="font-serif text-4xl lg:text-5xl text-charcoal mb-6">Visit the Studio</h2>
+        <div class="w-16 h-0.5 bg-clay mb-8"></div>
+        <p class="text-warmgray text-base leading-relaxed mb-10">
+          Ready to explore your creative side? Book a session or drop by the studio. We would love to welcome you to the Sunday Living family.
+        </p>
+
+        <div class="space-y-6">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl bg-clay/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="map-pin" class="w-5 h-5 text-clay"></i>
+            </div>
+            <div>
+              <h4 class="font-semibold text-charcoal mb-1">Location</h4>
+              <p class="text-warmgray text-sm">117/H-1/342 Model Town, Pandu Nagar, Kanpur<br><span class="text-clay">Above Personality Ikon Salon</span></p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl bg-clay/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="clock" class="w-5 h-5 text-clay"></i>
+            </div>
+            <div>
+              <h4 class="font-semibold text-charcoal mb-1">Studio Hours</h4>
+              <p class="text-warmgray text-sm">12:00 PM - 8:00 PM Daily<br><span class="text-red-500 font-medium">Mondays Closed</span></p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl bg-clay/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="phone" class="w-5 h-5 text-clay"></i>
+            </div>
+            <div>
+              <h4 class="font-semibold text-charcoal mb-1">Phone / WhatsApp</h4>
+              <a href="https://wa.me/917266083355" target="_blank" class="text-clay text-sm hover:text-terracotta transition-colors">+91 72660 83355</a>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl bg-clay/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="instagram" class="w-5 h-5 text-clay"></i>
+            </div>
+            <div>
+              <h4 class="font-semibold text-charcoal mb-1">Instagram</h4>
+              <a href="https://www.instagram.com/sundayliving.in" target="_blank" class="text-clay text-sm hover:text-terracotta transition-colors">@sundayliving.in</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Form / WhatsApp CTA -->
+      <div class="fade-up">
+        <div class="bg-white rounded-2xl p-8 lg:p-10 shadow-xl">
+          <h3 class="font-serif text-2xl text-charcoal mb-2">Quick Enquiry</h3>
+          <p class="text-warmgray text-sm mb-6">Send us a message on WhatsApp and we will get back to you within minutes.</p>
+
+          <form id="whatsappForm" class="space-y-4" onsubmit="handleFormSubmit(event)">
+            <div>
+              <label class="block text-sm font-medium text-charcoal mb-2">Your Name</label>
+              <input type="text" id="formName" required
+                     class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm transition-all duration-300"
+                     placeholder="Enter your name">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-charcoal mb-2">Service Interested In</label>
+              <select id="formService" required
+                      class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm transition-all duration-300">
+                <option value="">Select a service</option>
+                <option value="Painting Session">Painting Session</option>
+                <option value="Sketching Class">Sketching & Drawing</option>
+                <option value="Art Therapy">Art Therapy</option>
+                <option value="Group Workshop">Group Workshop</option>
+                <option value="Art Party">Art Party</option>
+                <option value="Custom Commission">Custom Commission</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-charcoal mb-2">Message</label>
+              <textarea id="formMessage" rows="4" required
+                        class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm transition-all duration-300 resize-none"
+                        placeholder="Tell us what you are looking for..."></textarea>
+            </div>
+            <button type="submit"
+                    class="w-full flex items-center justify-center gap-2 bg-clay hover:bg-terracotta text-white py-4 rounded-xl text-sm font-semibold transition-all duration-300 shadow-lg shadow-clay/20 hover:shadow-xl">
+              <i data-lucide="send" class="w-4 h-4"></i>
+              Send via WhatsApp
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Map Section -->
+<section class="h-[400px] lg:h-[500px] relative">
+  <iframe 
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3571.5!2d80.3!3d26.45!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjbCsDI3JzAwLjAiTiA4MMKwMTgnMDAuMCJF!5e0!3m2!1sen!2sin!4v1"
+    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" 
+    referrerpolicy="no-referrer-when-downgrade"
+    class="grayscale hover:grayscale-0 transition-all duration-700">
+  </iframe>
+  <div class="absolute bottom-6 left-6 bg-white px-6 py-4 rounded-xl shadow-xl">
+    <p class="font-serif text-lg text-charcoal">Sunday Living Art Studio</p>
+    <p class="text-warmgray text-sm">Model Town, Kanpur</p>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-charcoal text-white py-16">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+      <!-- Brand -->
+      <div class="lg:col-span-2">
+        <div class="flex items-center gap-3 mb-6">
+          <img src="https://github.com/gaur3009-p/drunk/raw/main/623286070_18556953166047918_4680378225490288554_n.jpg" 
+               alt="Sunday Living" class="w-12 h-12 rounded-full object-cover border border-white/20">
+          <div>
+            <h3 class="font-serif text-xl font-semibold">Sunday Living</h3>
+            <p class="text-white/40 text-xs tracking-widest uppercase">Art Studio</p>
+          </div>
+        </div>
+        <p class="text-white/50 text-sm leading-relaxed max-w-sm mb-6">
+          A curated art studio in Kanpur where creativity flourishes. Join us for painting, sketching, art therapy, and creative workshops.
+        </p>
+        <div class="flex items-center gap-4">
+          <a href="https://www.instagram.com/sundayliving.in" target="_blank"
+             class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-clay transition-colors">
+            <i data-lucide="instagram" class="w-5 h-5"></i>
+          </a>
+          <a href="https://wa.me/917266083355" target="_blank"
+             class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-green-500 transition-colors">
+            <i data-lucide="message-circle" class="w-5 h-5"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div>
+        <h4 class="font-semibold text-sm mb-6 tracking-wide">Quick Links</h4>
+        <ul class="space-y-3">
+          <li><a href="#about" class="text-white/50 hover:text-clay text-sm transition-colors">About Studio</a></li>
+          <li><a href="#services" class="text-white/50 hover:text-clay text-sm transition-colors">Our Services</a></li>
+          <li><a href="#gallery" class="text-white/50 hover:text-clay text-sm transition-colors">Gallery</a></li>
+          <li><a href="#contact" class="text-white/50 hover:text-clay text-sm transition-colors">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div>
+        <h4 class="font-semibold text-sm mb-6 tracking-wide">Contact</h4>
+        <ul class="space-y-3">
+          <li class="flex items-center gap-2 text-white/50 text-sm">
+            <i data-lucide="map-pin" class="w-4 h-4 text-clay"></i>
+            Model Town, Kanpur
+          </li>
+          <li class="flex items-center gap-2 text-white/50 text-sm">
+            <i data-lucide="clock" class="w-4 h-4 text-clay"></i>
+            12PM - 8PM (Mon Closed)
+          </li>
+          <li>
+            <a href="https://wa.me/917266083355" target="_blank" class="flex items-center gap-2 text-white/50 hover:text-clay text-sm transition-colors">
+              <i data-lucide="phone" class="w-4 h-4 text-clay"></i>
+              +91 72660 83355
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+      <p class="text-white/30 text-xs">2024 Sunday Living Art Studio. All rights reserved.</p>
+      <p class="text-white/30 text-xs">Crafted with <span class="text-clay">love</span> by @nims.okplease</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Floating WhatsApp Button -->
+<a href="https://wa.me/917266083355?text=Hi%20Sunday%20Living!%20I%20would%20like%20to%20book%20a%20session%20at%20your%20Art%20Studio.%20Please%20share%20details." 
+   target="_blank"
+   class="float-whatsapp fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110"
+   id="whatsappFloat">
+  <i data-lucide="message-circle" class="w-7 h-7"></i>
+</a>
+
+<!-- Scripts -->
+<script>
+  // Initialize Lucide Icons
+  lucide.createIcons();
+
+  // Lenis Smooth Scroll
+  const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true,
+  });
+
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+
+  // GSAP ScrollTrigger Integration with Lenis
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => {
+    lenis.raf(time * 1000);
+  });
+  gsap.ticker.lagSmoothing(0);
+
+  // Navbar Scroll Effect
+  const navbar = document.getElementById('navbar');
+  let lastScroll = 0;
+
+  lenis.on('scroll', ({ scroll }) => {
+    if (scroll > 100) {
+      navbar.classList.add('bg-charcoal/90', 'backdrop-blur-xl', 'shadow-lg');
+      navbar.classList.remove('bg-transparent');
+    } else {
+      navbar.classList.remove('bg-charcoal/90', 'backdrop-blur-xl', 'shadow-lg');
+      navbar.classList.add('bg-transparent');
+    }
+    lastScroll = scroll;
+  });
+
+  // Hero Animations
+  gsap.to('#heroLogo', { opacity: 1, scale: 1, duration: 1, delay: 0.2, ease: 'power3.out' });
+  gsap.to('#heroSubtitle', { opacity: 1, y: 0, duration: 0.8, delay: 0.4, ease: 'power3.out' });
+  gsap.to('#heroTitle', { opacity: 1, y: 0, duration: 1, delay: 0.6, ease: 'power3.out' });
+  gsap.to('#heroTagline', { opacity: 1, y: 0, duration: 0.8, delay: 0.9, ease: 'power3.out' });
+  gsap.to('#heroByline', { opacity: 1, y: 0, duration: 0.8, delay: 1.1, ease: 'power3.out' });
+  gsap.to('#heroCTA', { opacity: 1, y: 0, duration: 0.8, delay: 1.3, ease: 'power3.out' });
+
+  // Parallax Background
+  gsap.to('.parallax-bg', {
+    yPercent: 30,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '#hero',
+      start: 'top top',
+      end: 'bottom top',
+      scrub: true,
+    }
+  });
+
+  // Fade Up Animations
+  gsap.utils.toArray('.fade-up').forEach((el) => {
+    gsap.to(el, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 85%',
+        toggleActions: 'play none none none',
+      }
+    });
+  });
+
+  // Custom Cursor
+  const cursorDot = document.getElementById('cursorDot');
+  const cursorOutline = document.getElementById('cursorOutline');
+
+  if (window.matchMedia('(pointer: fine)').matches) {
+    document.addEventListener('mousemove', (e) => {
+      cursorDot.style.left = e.clientX + 'px';
+      cursorDot.style.top = e.clientY + 'px';
+      cursorOutline.style.left = e.clientX - 16 + 'px';
+      cursorOutline.style.top = e.clientY - 16 + 'px';
+    });
+
+    document.querySelectorAll('a, button, .magnetic-btn').forEach((el) => {
+      el.addEventListener('mouseenter', () => {
+        cursorOutline.style.transform = 'scale(1.5)';
+        cursorOutline.style.borderColor = '#B87D4B';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursorOutline.style.transform = 'scale(1)';
+        cursorOutline.style.borderColor = '#C4956A';
+      });
+    });
+  }
+
+  // Magnetic Buttons
+  document.querySelectorAll('.magnetic-btn').forEach((btn) => {
+    btn.addEventListener('mousemove', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+    });
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform = 'translate(0, 0)';
+    });
+  });
+
+  // Mobile Menu
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const closeMobileMenu = document.getElementById('closeMobileMenu');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  mobileMenuBtn.addEventListener('click', () => {
+    mobileMenu.classList.remove('hidden');
+    setTimeout(() => mobileMenu.classList.remove('opacity-0'), 10);
+    lenis.stop();
+  });
+
+  closeMobileMenu.addEventListener('click', () => {
+    mobileMenu.classList.add('opacity-0');
+    setTimeout(() => mobileMenu.classList.add('hidden'), 300);
+    lenis.start();
+  });
+
+  document.querySelectorAll('.mobile-link').forEach((link) => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.add('opacity-0');
+      setTimeout(() => mobileMenu.classList.add('hidden'), 300);
+      lenis.start();
+    });
+  });
+
+  // Smooth Scroll for Anchor Links
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.querySelector(anchor.getAttribute('href'));
+      if (target) {
+        lenis.scrollTo(target, { offset: -80 });
+      }
+    });
+  });
+
+  // WhatsApp Form Handler
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    const name = document.getElementById('formName').value;
+    const service = document.getElementById('formService').value;
+    const message = document.getElementById('formMessage').value;
+
+    const text = `Hi Sunday Living!%0A%0AMy Name: ${encodeURIComponent(name)}%0AService Interested: ${encodeURIComponent(service)}%0AMessage: ${encodeURIComponent(message)}%0A%0APlease share details and availability.`;
+
+    window.open(`https://wa.me/917266083355?text=${text}`, '_blank');
+  }
+
+  // Show/Hide Floating WhatsApp on scroll
+  const whatsappFloat = document.getElementById('whatsappFloat');
+  lenis.on('scroll', ({ scroll }) => {
+    if (scroll > 500) {
+      whatsappFloat.style.opacity = '1';
+      whatsappFloat.style.transform = 'translateY(0)';
+    } else {
+      whatsappFloat.style.opacity = '0';
+      whatsappFloat.style.transform = 'translateY(20px)';
+    }
+  });
+  whatsappFloat.style.transition = 'opacity 0.3s, transform 0.3s';
+  whatsappFloat.style.opacity = '0';
+  whatsappFloat.style.transform = 'translateY(20px)';
+</script>
+
+</body>
+</html>
